@@ -1,4 +1,0 @@
-typer
-pydantic
-rich
-sqlalchemy

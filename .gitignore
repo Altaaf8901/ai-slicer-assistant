@@ -13,3 +13,8 @@ artifacts/reports/
 
 # OS
 .DS_Store
+
+# Packaging/build artifacts
+*.egg-info/
+dist/
+build/
