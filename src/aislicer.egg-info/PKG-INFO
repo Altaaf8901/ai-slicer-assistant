@@ -1,0 +1,9 @@
+Metadata-Version: 2.4
+Name: aislicer
+Version: 0.0.1
+Summary: AI Slicer Assistant - constrained generation + evaluation harness
+Requires-Python: >=3.12
+Requires-Dist: typer
+Requires-Dist: pydantic
+Requires-Dist: rich
+Requires-Dist: sqlalchemy

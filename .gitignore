@@ -1,0 +1,15 @@
+# Python
+__pycache__/
+*.pyc
+
+# Virtual environment
+.venv/
+
+# Database
+artifacts/telemetry.sqlite
+
+# Reports
+artifacts/reports/
+
+# OS
+.DS_Store

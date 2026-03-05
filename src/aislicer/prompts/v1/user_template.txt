@@ -1,0 +1,7 @@
+Generate slicer settings for:
+material={material}
+nozzle_mm={nozzle_mm}
+goal={goal}
+
+Return JSON with fields:
+material,nozzle_mm,layer_height_mm,print_speed_mm_s,infill_percent,supports,bed_temp_c,nozzle_temp_c,notes

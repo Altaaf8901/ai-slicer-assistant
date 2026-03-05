@@ -1,0 +1,5 @@
+{"scenario_id":"pla_strength_01","input":{"material":"PLA","nozzle":0.4,"goal":"strength"}}
+{"scenario_id":"pla_speed_01","input":{"material":"PLA","nozzle":0.4,"goal":"speed"}}
+{"scenario_id":"abs_strength_01","input":{"material":"ABS","nozzle":0.4,"goal":"strength"}}
+{"scenario_id":"abs_speed_01","input":{"material":"ABS","nozzle":0.4,"goal":"speed"}}
+{"scenario_id":"petg_balanced_01","input":{"material":"PETG","nozzle":0.4,"goal":"balanced"}}
