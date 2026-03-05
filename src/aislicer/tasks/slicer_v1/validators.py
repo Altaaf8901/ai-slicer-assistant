@@ -1,11 +1,14 @@
 from typing import List
 from .schema import SlicerConfigV1
 
+
 def validate_config(cfg: SlicerConfigV1) -> List[str]:
     issues: List[str] = []
 
     if cfg.layer_height_mm > cfg.nozzle_mm * 0.8:
-        issues.append("layer_height_mm too high for nozzle diameter (risk of poor extrusion).")
+        issues.append(
+            "layer_height_mm too high for nozzle diameter (risk of poor extrusion)."
+        )
 
     mat = cfg.material.strip().upper()
     if mat == "PLA":

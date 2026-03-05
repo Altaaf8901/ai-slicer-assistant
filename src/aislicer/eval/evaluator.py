@@ -1,4 +1,3 @@
-
 from __future__ import annotations
 
 import json
@@ -9,6 +8,7 @@ from aislicer.core.normalize import normalize_inputs
 from aislicer.core.prompting import build_prompt
 from aislicer.core.providers.stub import StubProvider
 from aislicer.core.retry import run_with_retries
+from aislicer.core.providers.openai_provider import OpenAIProvider
 
 from aislicer.telemetry.storage import TelemetryStore, TraceEvent
 
@@ -32,9 +32,10 @@ def run_eval(
     prompt_version: str,
     limit: int,
     db_path: str,
+    experiment: str,
 ) -> Tuple[int, int]:
     store = TelemetryStore(db_path=db_path)
-    provider = StubProvider()
+    provider = StubProvider() if model == "stub" else OpenAIProvider()
 
     scenarios = load_scenarios(scenarios_path)[:limit]
 
@@ -45,7 +46,9 @@ def run_eval(
         scenario_id = s["scenario_id"]
         inp = s["input"]
 
-        job = normalize_inputs(material=inp["material"], nozzle=inp["nozzle"], goal=inp["goal"])
+        job = normalize_inputs(
+            material=inp["material"], nozzle=inp["nozzle"], goal=inp["goal"]
+        )
         prompt_text = build_prompt(job, prompt_version=prompt_version)
 
         out = run_with_retries(
@@ -70,6 +73,7 @@ def run_eval(
                 violations=out.violations,
                 latency_ms=out.latency_ms,
                 retries=out.retries,
+                experiment=experiment,
             )
         )
 

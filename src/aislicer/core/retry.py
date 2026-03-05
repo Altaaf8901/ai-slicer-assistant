@@ -6,6 +6,7 @@ from aislicer.core.providers.base import ModelProvider, ModelResult
 from aislicer.core.parse import parse_slicer_config
 from aislicer.tasks.slicer_v1.validators import validate_config
 
+
 @dataclass(frozen=True)
 class RunOutcome:
     raw_text: str
@@ -16,6 +17,7 @@ class RunOutcome:
     violations: List[str]
     valid: bool
     output_obj: dict
+
 
 def run_with_retries(
     *,

@@ -5,12 +5,14 @@ from aislicer.core.normalize import normalize_inputs
 from aislicer.core.prompting import build_prompt
 from aislicer.core.providers.stub import StubProvider
 from aislicer.core.parse import parse_slicer_config
+from aislicer.core.providers.openai_provider import OpenAIProvider
 from aislicer.tasks.slicer_v1.validators import validate_config
 
 from aislicer.eval.evaluator import run_eval
 from aislicer.eval.report import generate_report
 
 app = typer.Typer(add_completion=False)
+
 
 @app.command()
 def run(
@@ -23,7 +25,7 @@ def run(
     job = normalize_inputs(material=material, nozzle=nozzle, goal=goal)
     prompt_text = build_prompt(job, prompt_version=prompt_version)
 
-    provider = StubProvider()
+    provider = StubProvider() if model == "stub" else OpenAIProvider()
     res = provider.generate(prompt=prompt_text, model=model)
 
     cfg, parsed_ok, parse_error = parse_slicer_config(res.raw_text)
@@ -44,12 +46,16 @@ def run(
 
     print("\n[bold green]Config passed validation.[/bold green]")
 
+
 @app.command()
 def eval(
     n: int = typer.Option(5),
     model: str = typer.Option("stub"),
     prompt_version: str = typer.Option("v1"),
     db: str = typer.Option("artifacts/telemetry.sqlite"),
+    experiment: str = typer.Option(
+        "default", help="Experiment label for grouping traces"
+    ),
 ):
     total, valid = run_eval(
         task="slicer_v1",
@@ -58,16 +64,20 @@ def eval(
         prompt_version=prompt_version,
         limit=n,
         db_path=db,
+        experiment=experiment,
     )
     print(f"[bold]Eval complete[/bold] — valid {valid}/{total}. Traces saved to: {db}")
+
 
 @app.command()
 def report(
     db: str = typer.Option("artifacts/telemetry.sqlite"),
     out: str = typer.Option("artifacts/reports/summary.md"),
+    experiment: str = typer.Option("", help="If set, only report this experiment"),
 ):
-    p = generate_report(db_path=db, out_path=out)
+    p = generate_report(db_path=db, out_path=out, experiment=(experiment or None))
     print(f"[bold green]Report written:[/bold green] {p}")
+
 
 if __name__ == "__main__":
     app()

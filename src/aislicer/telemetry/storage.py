@@ -11,11 +11,13 @@ from sqlalchemy.orm import declarative_base, sessionmaker
 
 Base = declarative_base()
 
+
 class Trace(Base):
     __tablename__ = "traces"
 
     id = Column(Integer, primary_key=True, autoincrement=True)
     created_utc = Column(String, nullable=False)
+    experiment = Column(String, nullable=False)
 
     task = Column(String, nullable=False)
     scenario_id = Column(String, nullable=False)
@@ -36,6 +38,7 @@ class Trace(Base):
     latency_ms = Column(Integer, nullable=False)
     retries = Column(Integer, nullable=False)
 
+
 @dataclass(frozen=True)
 class TraceEvent:
     task: str
@@ -51,6 +54,8 @@ class TraceEvent:
     violations: List[str]
     latency_ms: int
     retries: int
+    experiment: str
+
 
 class TelemetryStore:
     def __init__(self, db_path: str = "artifacts/telemetry.sqlite"):
@@ -64,6 +69,7 @@ class TelemetryStore:
 
         row = Trace(
             created_utc=created_utc,
+            experiment=ev.experiment,
             task=ev.task,
             scenario_id=ev.scenario_id,
             model=ev.model,

@@ -1,5 +1,6 @@
 from pydantic import BaseModel, Field
 
+
 class SlicerConfigV1(BaseModel):
     material: str = Field(...)
     nozzle_mm: float = Field(..., ge=0.1, le=2.0)
